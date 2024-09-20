@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { StageConfig } from 'konva/lib/Stage';
 import { CircleConfig } from 'konva/lib/shapes/Circle';
 import {
+  CoreContainerComponent,
   CoreShapeComponent,
   NgKonvaEventObject,
   StageComponent,
@@ -24,7 +25,7 @@ import {
     </section>
   `,
   standalone: true,
-  imports: [StageComponent, CoreShapeComponent],
+  imports: [StageComponent, CoreContainerComponent, CoreShapeComponent],
 })
 export class CircleExampleComponent implements OnInit {
   public configStage: Partial<StageConfig> = {

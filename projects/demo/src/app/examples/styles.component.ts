@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CoreShapeComponent, StageComponent } from 'ng2-konva';
+import { CoreContainerComponent, CoreShapeComponent, StageComponent } from 'ng2-konva';
 import { StageConfig } from 'konva/lib/Stage';
 import { RegularPolygonConfig } from 'konva/lib/shapes/RegularPolygon';
 
@@ -19,7 +19,7 @@ import { RegularPolygonConfig } from 'konva/lib/shapes/RegularPolygon';
     </section>
   `,
   standalone: true,
-  imports: [StageComponent, CoreShapeComponent],
+  imports: [StageComponent, CoreContainerComponent, CoreShapeComponent],
 })
 export class StylesExampleComponent {
   public configStage: Partial<StageConfig> = {

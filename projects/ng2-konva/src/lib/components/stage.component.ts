@@ -10,6 +10,7 @@ import {
   QueryList,
   OnDestroy,
   inject,
+  forwardRef,
 } from '@angular/core';
 import { CoreShapeComponent as CoreShape } from './core-shape.component';
 import { updatePicture, createListener, applyNodeProps } from '../utils/index';
@@ -19,11 +20,18 @@ import { Layer } from 'konva/lib/Layer';
 import { ContainerConfig } from 'konva/lib/Container';
 import { NgKonvaEventObject } from '../interfaces/ngKonvaEventObject';
 import { PropsType } from '../utils/types';
+import { KO_CONTAINER_TOKEN } from './container.token';
 
 @Component({
   selector: 'ko-stage',
   standalone: true,
   template: `<div><ng-content></ng-content></div>`,
+  providers: [
+    {
+      provide: KO_CONTAINER_TOKEN,
+      useExisting: StageComponent,
+    },
+  ],
 })
 export class StageComponent
   implements KonvaComponent, AfterContentInit, OnDestroy
@@ -104,13 +112,13 @@ export class StageComponent
   }
 
   ngAfterContentInit(): void {
-    this.shapes.forEach((item: CoreShape) => {
-      if (!(item.getStage() instanceof Layer)) {
-        throw 'You can only add Layer Nodes to Stage Nodes!';
-      }
-      this._stage.add(<Layer>item.getStage());
-      updatePicture(this._stage);
-    });
+    // this.shapes.forEach((item: CoreShape) => {
+    //   if (!(item.getStage() instanceof Layer)) {
+    //     throw 'You can only add Layer Nodes to Stage Nodes!';
+    //   }
+    //   this._stage.add(<Layer>item.getStage());
+    //   updatePicture(this._stage);
+    // });
   }
 
   ngOnDestroy(): void {

@@ -11,6 +11,8 @@ import {
   OnInit,
   inject,
   AfterContentChecked,
+  AfterViewInit,
+  Injector,
 } from '@angular/core';
 import { getName, createListener, applyNodeProps } from '../utils/index';
 import { KonvaComponent } from '../interfaces/ko-component.interface';
@@ -41,18 +43,17 @@ import { Wedge } from 'konva/lib/shapes/Wedge';
 import { FastLayer } from 'konva/lib/FastLayer';
 import { NgKonvaEventObject } from '../interfaces/ngKonvaEventObject';
 import { PropsType } from '../utils/types';
+import { KO_CONTAINER_TOKEN } from './container.token';
 
 @Component({
   selector:
-    'ko-shape, ko-layer, ko-circle, ko-fastlayer, ko-group, ko-label, ko-rect, ko-ellipse, ko-wedge, ko-line, ko-sprite, ko-image, ko-text, ko-text-path, ko-star, ko-ring, ko-arc, ko-tag, ko-path, ko-regular-polygon, ko-arrow, ko-transformer',
+    'ko-shape, ko-circle, ko-label, ko-rect, ko-ellipse, ko-wedge, ko-line, ko-sprite, ko-image, ko-text, ko-text-path, ko-star, ko-ring, ko-arc, ko-tag, ko-path, ko-regular-polygon, ko-arrow, ko-transformer',
   standalone: true,
   template: `<div><ng-content></ng-content></div>`,
 })
 export class CoreShapeComponent
-  implements KonvaComponent, AfterContentChecked, OnDestroy, OnInit
+  implements KonvaComponent, OnDestroy, OnInit, AfterViewInit
 {
-  @ContentChildren(CoreShapeComponent)
-  shapes = new QueryList<CoreShapeComponent>();
   @Input() set config(config: ShapeConfigTypes) {
     this._config = config;
     this.uploadKonva(config);
@@ -60,6 +61,10 @@ export class CoreShapeComponent
   get config(): ShapeConfigTypes {
     return this._config;
   }
+
+  elementRef = inject(ElementRef<HTMLElement>);
+
+  container = inject(KO_CONTAINER_TOKEN, { skipSelf: true });
 
   @Output() mouseover: EventEmitter<NgKonvaEventObject<MouseEvent>> =
     new EventEmitter<NgKonvaEventObject<MouseEvent>>();
@@ -101,7 +106,7 @@ export class CoreShapeComponent
     new EventEmitter<NgKonvaEventObject<MouseEvent>>();
 
   public nameNode: keyof typeof ShapeTypes | 'Shape' | 'Sprite' = getName(
-    inject(ElementRef).nativeElement.localName
+    inject(ElementRef).nativeElement.localName,
   ) as keyof typeof ShapeTypes | 'Shape' | 'Sprite';
 
   private cacheProps: PropsType = {};
@@ -194,6 +199,11 @@ export class CoreShapeComponent
     }
   }
 
+  ngAfterViewInit(): void {
+    (this.container.getStage() as any).add(<Layer>this.getStage());
+    updatePicture(this.container.getStage());
+  }
+
   protected uploadKonva(config: ShapeConfigTypes): void {
     if (!this._stage) return;
     const props = {
@@ -202,17 +212,6 @@ export class CoreShapeComponent
     };
     applyNodeProps(this, props, this.cacheProps);
     this.cacheProps = props;
-  }
-
-  ngAfterContentChecked(): void {
-    this.shapes.forEach((item: CoreShapeComponent) => {
-      if (this !== item) {
-        if (this._stage instanceof Group || this._stage instanceof Layer) {
-          this._stage.add(item.getStage());
-        }
-        updatePicture(this._stage);
-      }
-    });
   }
 
   ngOnDestroy(): void {

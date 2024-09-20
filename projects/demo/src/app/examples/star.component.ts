@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
+  CoreContainerComponent,
   CoreShapeComponent,
   NgKonvaEventObject,
   StageComponent,
@@ -31,7 +32,7 @@ type ExtStartConfig = StarConfig & { startScale: number };
     </section>
   `,
   standalone: true,
-  imports: [StageComponent, CoreShapeComponent, NgForOf, NgIf],
+  imports: [StageComponent, CoreContainerComponent, CoreShapeComponent, NgForOf, NgIf],
 })
 export class StarExampleComponent implements OnInit {
   @ViewChild('layer') layer: CoreShapeComponent;
