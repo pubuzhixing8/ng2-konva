@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {
+  CoreContainerComponent,
   CoreShapeComponent,
   NgKonvaEventObject,
   StageComponent,
@@ -26,7 +27,7 @@ import { TextConfig } from 'konva/lib/shapes/Text';
     </section>
   `,
   standalone: true,
-  imports: [StageComponent, CoreShapeComponent],
+  imports: [StageComponent, CoreContainerComponent, CoreShapeComponent],
 })
 export class EventExampleComponent {
   public configStage: Partial<StageConfig> = {

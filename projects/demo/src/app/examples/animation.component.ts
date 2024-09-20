@@ -1,5 +1,5 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
-import { StageComponent, CoreShapeComponent } from 'ng2-konva';
+import { StageComponent, CoreShapeComponent, CoreContainerComponent } from 'ng2-konva';
 import { RegularPolygonConfig } from 'konva/lib/shapes/RegularPolygon';
 import { ContainerConfig } from 'konva/lib/Container';
 import { IFrame } from 'konva/lib/types';
@@ -20,7 +20,7 @@ import { Animation } from 'konva/lib/Animation';
     </section>
   `,
   standalone: true,
-  imports: [StageComponent, CoreShapeComponent],
+  imports: [StageComponent, CoreContainerComponent, CoreShapeComponent],
 })
 export class AnimationExampleComponent implements AfterViewInit {
   @ViewChild('stage') stage: StageComponent;
